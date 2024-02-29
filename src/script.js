@@ -11,6 +11,7 @@ import { loadingManager } from "./loadingManager"
  */
 // Debug
 const gui = new GUI()
+gui.hide()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -46,27 +47,48 @@ fontLoader.load(
     (font) =>
     {
         // Material
-        const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
-
+      const material = new THREE.MeshNormalMaterial()
+      material.metalness = 0.7
+      material.roughness = 0.2
+      
         // Text
-        const textGeometry = new TextGeometry(
-            'Hello Three.js',
+        const firstTextGeometry = new TextGeometry(
+            'WTF!',
             {
                 font: font,
-                size: 0.5,
-                height: 0.2,
-                curveSegments: 12,
+                size: 0.7,
+                height: 0.9,
+                curveSegments: 5,
                 bevelEnabled: true,
                 bevelThickness: 0.03,
                 bevelSize: 0.02,
                 bevelOffset: 0,
-                bevelSegments: 5
+                bevelSegments: 2
             }
         )
-        textGeometry.center()
+        const secondTextGeometry = new TextGeometry(
+              'This is awesome!',
+              {
+                  font: font,
+                  size: 0.7,
+                  height: 0.9,
+                  curveSegments: 5,
+                  bevelEnabled: true,
+                  bevelThickness: 0.03,
+                  bevelSize: 0.02,
+                  bevelOffset: 0,
+                  bevelSegments: 2
+              }
+          )
+        firstTextGeometry.center()
+        secondTextGeometry.center()
+      
+        const firstText = new THREE.Mesh(firstTextGeometry, material)
+        const secondText = new THREE.Mesh(secondTextGeometry, material)
+        scene.add(firstText, secondText)
+        
+        firstText.position.y = 1.2
 
-        const text = new THREE.Mesh(textGeometry, material)
-        scene.add(text)
 
         // Donuts
         const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64)
@@ -74,9 +96,9 @@ fontLoader.load(
         for(let i = 0; i < 100; i++)
         {
             const donut = new THREE.Mesh(donutGeometry, material)
-            donut.position.x = (Math.random() - 0.5) * 10
-            donut.position.y = (Math.random() - 0.5) * 10
-            donut.position.z = (Math.random() - 0.5) * 10
+            donut.position.x = (Math.random() - 0.5) * 20 
+            donut.position.y = (Math.random() - 0.5) * 20
+            donut.position.z = (Math.random() - 0.5) * 20
             donut.rotation.x = Math.random() * Math.PI
             donut.rotation.y = Math.random() * Math.PI
             const scale = Math.random()
@@ -110,14 +132,19 @@ window.addEventListener('resize', () =>
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
+window.addEventListener('keydown', (event) => {
+  if(event.key == 'h')
+    gui.show(gui._hidden)
+})
+
 /**
  * Camera
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 1
-camera.position.y = 1
-camera.position.z = 50
+camera.position.x = 0
+camera.position.y = 0
+camera.position.z = 10
 scene.add(camera)
 
 // Controls
