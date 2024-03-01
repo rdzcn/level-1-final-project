@@ -5,6 +5,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import GUI from 'lil-gui'
 import { loadingManager } from "./loadingManager"
+import gsap from "gsap"
 
 /**
  * Base
@@ -44,71 +45,80 @@ const fontLoader = new FontLoader()
 
 fontLoader.load(
     '/fonts/helvetiker_regular.typeface.json',
-    (font) =>
-    {
+    (font) => {
         // Material
       const material = new THREE.MeshNormalMaterial()
-      material.metalness = 0.7
-      material.roughness = 0.2
       
         // Text
         const firstTextGeometry = new TextGeometry(
-            'WTF!',
+            'Say whaaaat!?',
             {
                 font: font,
                 size: 0.7,
-                height: 0.9,
+                height: 0.7,
                 curveSegments: 5,
                 bevelEnabled: true,
-                bevelThickness: 0.03,
-                bevelSize: 0.02,
+                bevelThickness: 0.05,
+                bevelSize: 0.04,
                 bevelOffset: 0,
-                bevelSegments: 2
+                bevelSegments: 10
             }
         )
         const secondTextGeometry = new TextGeometry(
-              'This is awesome!',
-              {
-                  font: font,
-                  size: 0.7,
-                  height: 0.9,
-                  curveSegments: 5,
-                  bevelEnabled: true,
-                  bevelThickness: 0.03,
-                  bevelSize: 0.02,
-                  bevelOffset: 0,
-                  bevelSegments: 2
-              }
+            'This is awesome!',
+            {
+                font: font,
+                size: 0.7,
+                height: 0.7,
+                curveSegments: 5,
+                bevelEnabled: true,
+                bevelThickness: 0.05,
+                bevelSize: 0.04,
+                bevelOffset: 0,
+                bevelSegments: 10
+            }
           )
         firstTextGeometry.center()
         secondTextGeometry.center()
       
         const firstText = new THREE.Mesh(firstTextGeometry, material)
         const secondText = new THREE.Mesh(secondTextGeometry, material)
+        firstText.material.transparent = true
+        firstText.material.opacity = 0.2
         scene.add(firstText, secondText)
+      
+        gsap.to(firstText.material, { opacity: 1, duration: 5 })
         
         firstText.position.y = 1.2
-
-
+      
         // Donuts
         const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64)
+        const torusKnotGeometry = new THREE.TorusKnotGeometry(1, 0.1, 50, 20, 2, 3 ); 
 
-        for(let i = 0; i < 100; i++)
-        {
+        for (let i = 0; i < 100; i++) {
+            const torusKnot = new THREE.Mesh(torusKnotGeometry, material)
+            torusKnot.position.x = (Math.random() - 0.5) * 20 
+            torusKnot.position.y = (Math.random() - 0.5) * 20
+            torusKnot.position.z = (Math.random() - 0.5) * 20
+            torusKnot.rotation.x = Math.random() * Math.PI
+            torusKnot.rotation.y = Math.random() * Math.PI
+            const scale = Math.random()
+            torusKnot.scale.set(scale / 5, scale / 5, scale / 5)
             const donut = new THREE.Mesh(donutGeometry, material)
             donut.position.x = (Math.random() - 0.5) * 20 
             donut.position.y = (Math.random() - 0.5) * 20
             donut.position.z = (Math.random() - 0.5) * 20
             donut.rotation.x = Math.random() * Math.PI
             donut.rotation.y = Math.random() * Math.PI
-            const scale = Math.random()
+            // const scale = Math.random()
             donut.scale.set(scale, scale, scale)
 
-            scene.add(donut)
+            scene.add(torusKnot, donut)
         }
-    }
-)
-
+      
+      }
+      )
+      
 /**
  * Sizes
  */
@@ -144,8 +154,10 @@ window.addEventListener('keydown', (event) => {
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 0
 camera.position.y = 0
-camera.position.z = 10
+camera.position.z = 50
 scene.add(camera)
+
+gsap.to(camera.position, { x: 2, y: 2, z: 5, duration: 5 })
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
