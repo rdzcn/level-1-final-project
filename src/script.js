@@ -71,11 +71,14 @@ rgbeLoader.load(
       
         const firstText = new THREE.Mesh(firstTextGeometry, material)
         const secondText = new THREE.Mesh(secondTextGeometry, material)
-        firstText.material.transparent = true
-        firstText.material.opacity = 0.2
-        scene.add(firstText, secondText)
+        const textGroup = new THREE.Group()
+        textGroup.add(firstText, secondText)
+        material.transparent = true
+        material.opacity = 0.2
+        scene.add(textGroup)
       
-        gsap.to(firstText.material, { opacity: 1, duration: 5 })
+        gsap.to(textGroup.rotation, { y: Math.PI * 2, x: Math.PI * 2, duration: 2, delay: 2, ease: "power1.inOut" })
+        gsap.to(material, { opacity: 1, duration: 2 })
         firstText.position.y = 1.2
         gsap.to(camera.position, { x: 2, y: 2, z: 10, duration: 2, ease: "power1.out" })
       
