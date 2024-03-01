@@ -154,10 +154,10 @@ window.addEventListener('keydown', (event) => {
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 0
 camera.position.y = 0
-camera.position.z = 50
+camera.position.z = 120
 scene.add(camera)
 
-gsap.to(camera.position, { x: 2, y: 2, z: 5, duration: 5 })
+gsap.to(camera.position, { x: 2, y: 2, z: 5, duration: 2, transition: "ease-in" })
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
