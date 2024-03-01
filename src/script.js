@@ -22,28 +22,16 @@ const scene = new THREE.Scene()
 
 // Environment map
 const rgbeLoader = new RGBELoader(loadingManager)
+const fontLoader = new FontLoader()
+
 rgbeLoader.load(
   "/environment/kloppenheim_06_puresky_2k.hdr",
   (environmentMap) => {
     environmentMap.mapping = THREE.EquirectangularReflectionMapping;
     scene.background = environmentMap;
     scene.environment = environmentMap;
-})
 
-
-/**
- * Textures
- */
-const textureLoader = new THREE.TextureLoader()
-const matcapTexture = textureLoader.load('textures/matcaps/8.png')
-matcapTexture.colorSpace = THREE.SRGBColorSpace
-
-/**
- * Fonts
- */
-const fontLoader = new FontLoader()
-
-fontLoader.load(
+    fontLoader.load(
     '/fonts/helvetiker_regular.typeface.json',
     (font) => {
         // Material
@@ -88,8 +76,9 @@ fontLoader.load(
         scene.add(firstText, secondText)
       
         gsap.to(firstText.material, { opacity: 1, duration: 5 })
-        
+        gsap.to(camera.position, { x: 2, y: 2, z: 5, duration: 2, transition: "ease-in" })
         firstText.position.y = 1.2
+        gsap.to(camera.position, { x: 2, y: 2, z: 5, duration: 2, ease: "power1.out" })
       
         // Donuts
         const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64)
@@ -118,7 +107,20 @@ fontLoader.load(
       
       }
       )
-      
+    
+})
+
+
+/**
+ * Textures
+ */
+// const textureLoader = new THREE.TextureLoader()
+// const matcapTexture = textureLoader.load('textures/matcaps/8.png')
+// matcapTexture.colorSpace = THREE.SRGBColorSpace
+
+
+
+
 /**
  * Sizes
  */
@@ -156,8 +158,6 @@ camera.position.x = 0
 camera.position.y = 0
 camera.position.z = 120
 scene.add(camera)
-
-gsap.to(camera.position, { x: 2, y: 2, z: 5, duration: 2, transition: "ease-in" })
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
