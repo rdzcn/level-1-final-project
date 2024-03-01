@@ -76,9 +76,8 @@ rgbeLoader.load(
         scene.add(firstText, secondText)
       
         gsap.to(firstText.material, { opacity: 1, duration: 5 })
-        gsap.to(camera.position, { x: 2, y: 2, z: 5, duration: 2, transition: "ease-in" })
         firstText.position.y = 1.2
-        gsap.to(camera.position, { x: 2, y: 2, z: 5, duration: 2, ease: "power1.out" })
+        gsap.to(camera.position, { x: 2, y: 2, z: 10, duration: 2, ease: "power1.out" })
       
         // Donuts
         const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64)
