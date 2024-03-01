@@ -112,17 +112,6 @@ rgbeLoader.load(
     
 })
 
-
-/**
- * Textures
- */
-// const textureLoader = new THREE.TextureLoader()
-// const matcapTexture = textureLoader.load('textures/matcaps/8.png')
-// matcapTexture.colorSpace = THREE.SRGBColorSpace
-
-
-
-
 /**
  * Sizes
  */
