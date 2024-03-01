@@ -2,16 +2,22 @@ import * as THREE from 'three'
 
 export const loadingManager = new THREE.LoadingManager()
 
-loadingManager.onStart = () => {
-    console.log('onStart')
+const progressBar = document.querySelector('#progress-bar');
+const progressBarContainer = document.querySelector('.progress-bar-container');
+
+loadingManager.onStart = (url, item, total) => {
+  console.log('onStart')
+  console.log(url)
+  console.log(item)
+  console.log(total)
+}
+
+loadingManager.onProgress = (url, loaded, total) => {
+  progressBar.value = (loaded / total) * 100;
 }
 
 loadingManager.onLoad = () => {
-    console.log('onLoad')
-}
-
-loadingManager.onProgress = () => {
-    console.log('onProgress')
+  progressBarContainer.style.display = 'none';
 }
 
 loadingManager.onError = () => {
